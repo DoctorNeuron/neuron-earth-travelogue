@@ -1,4 +1,4 @@
-export interface FoodReview {
+export interface FoodReviewData {
   
   /** dd-mmm-yy of my visit */
   [key: string]: {

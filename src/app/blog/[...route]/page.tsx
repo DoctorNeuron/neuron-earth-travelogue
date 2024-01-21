@@ -5,6 +5,9 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import FoodReview from '../../../components/blog/food-review/FoodReview';
 import ImageCaption from '@/components/blog/image-caption/ImageCaption';
 import { useRouter } from 'next/router';
+import { FoodReviewData, FoodReviewVendor } from '@/model/food-review';
+import { NextResponse } from 'next/server';
+import { notFound } from 'next/navigation';
 
 const BLOG_URL = "https://raw.githubusercontent.com/DoctorNeuron/neuron-earth-travelogue-content/master/";
 
@@ -17,14 +20,37 @@ interface MarkdownData {
   keywords: string[]
 }
 
-const cacheData = cache(async () => {
-  const res = await fetch(BLOG_URL + `blog/content/2024/january/20_multiple_places.md`);
-  const mat = matter(await res.text());
+interface BlogPageProps {
+  content: string,
+  review: { [key: string]: FoodReviewVendor },
+  data: MarkdownData
+}
 
+export async function generateMetadata(route: string[]) {
+  let d = await getData(route);
+  if (d === false) return false;
+  return {
+    title: d.data.title
+  }
+}
+
+export async function getData(route: string[]){
+  if (route.length !== 3) return false;
+  const res = await fetch(BLOG_URL + `blog/content/${route[0]}/${route[1]}/${route[2]}.md`);
+  if (!res.ok) return false;
+
+  return matter(await res.text());
+}
+
+export async function processContent(mat: matter.GrayMatterFile<string>){
   // cari data foodreview kalau ada
   const reviewPath = (mat.data.path as string).split('/');
   reviewPath.pop();
-  const reviews = await (await fetch(`${BLOG_URL}${reviewPath.join('/')}/review.json`)).json()
+
+  const reviewFetch = await fetch(`${BLOG_URL}${reviewPath.join('/')}/review.json`);
+  if (!reviewFetch.ok) return false;
+
+  const reviews = (await (reviewFetch).json()) as FoodReviewData;
 
   return {
     content: mat.content,
@@ -37,45 +63,46 @@ const cacheData = cache(async () => {
       path: mat.data.path,
       keywords: (mat.data.keywords as string).split("|")
     } as MarkdownData
+  } as BlogPageProps;
+
+}
+
+export default async function BlogPage({params} : {params: { route: string[] }}) {
+
+  const markdownData = await getData(params.route);
+  if (markdownData === false) return notFound();
+
+  const finalData = await processContent(markdownData);
+  if (finalData === false) return notFound();
+
+  const usedComponents = {
+    FoodReview: async (pr: any) => {
+      let id = pr.id as string;
+      return <FoodReview id={id} order={finalData.review[id]} />
+    },
+    img: (pr: any) => {
+      let realProps = pr as { src: string, alt: string };
+      let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
+      let start = pathRegex.exec(realProps.src) ?? [];
+      let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
+      return <ImageCaption src={newPath} caption={realProps.alt} />
+    },
+    Image: (pr: any) => {
+      let realProps = pr as { src: string, alt: string };
+      let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
+      let start = pathRegex.exec(realProps.src) ?? [];
+      let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
+      return <ImageCaption src={newPath} caption={realProps.alt} />
+    },
+    p: (pr: any) => (<p className='text-justify mt-2 mb-2'>{pr.children}</p>),
+    h1: (pr: any) => (<h1 className='font-bold text-4xl'>{pr.children}</h1>),
+    h2: (pr: any) => (<h2 className='font-bold text-xl mt-8'>{pr.children}</h2>),
+    h3: (pr: any) => (<h3 className='font-bold text-lg italic mb-4'>{pr.children}</h3>),
   };
-});
 
-export async function generateMetadata() {
-  return {
-    title: (await cacheData()).data.title
-  }
-}
-
-const usedComponents = {
-  FoodReview: async (props: any) => {
-    let id = props.id;
-    let rev = (await cacheData())
-    return <FoodReview id={id} order={rev.review[id]} />
-  },
-  img: (props: any) => {
-    let realProps = props as { src: string, alt: string };
-    let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
-    let start = pathRegex.exec(realProps.src) ?? [];
-    let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <ImageCaption src={newPath} caption={realProps.alt} />
-  },
-  Image: (props: any) => {
-    let realProps = props as { src: string, alt: string };
-    let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
-    let start = pathRegex.exec(realProps.src) ?? [];
-    let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <ImageCaption src={newPath} caption={realProps.alt} />
-  },
-  p: (props: any) => (<p className='text-justify mt-2 mb-2'>{props.children}</p>),
-  h1: (props: any) => (<h1 className='font-bold text-4xl'>{props.children}</h1>),
-  h2: (props: any) => (<h2 className='font-bold text-xl mt-8'>{props.children}</h2>),
-  h3: (props: any) => (<h3 className='font-bold text-lg italic mb-4'>{props.children}</h3>),
-}
-
-export default async function BlogPage() {
   return (
-    <div className="p-7">
-      <MDXRemote source={(await cacheData()).content} components={usedComponents}></MDXRemote>
+    <div>
+      <MDXRemote source={finalData.content} components={usedComponents}></MDXRemote>
     </div>
   )
 }

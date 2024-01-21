@@ -4,12 +4,9 @@ import { DateTime } from 'luxon';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import FoodReview from '../../../components/blog/food-review/FoodReview';
 import ImageCaption from '@/components/blog/image-caption/ImageCaption';
-import { useRouter } from 'next/router';
 import { FoodReviewData, FoodReviewVendor } from '@/model/food-review';
-import { NextResponse } from 'next/server';
 import { notFound } from 'next/navigation';
-
-const BLOG_URL = "https://raw.githubusercontent.com/DoctorNeuron/neuron-earth-travelogue-content/master/";
+import { BLOG_URL, fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
 
 interface MarkdownData {
   title: string,
@@ -27,34 +24,29 @@ interface BlogPageProps {
 }
 
 export async function generateMetadata(route: string[]) {
-  let d = await getData(route);
+  let d = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`)
   if (d === false) return false;
   return {
     title: d.data.title
   }
 }
 
-export async function getData(route: string[]){
+export async function getData(route: string[]) {
   if (route.length !== 3) return false;
-  const res = await fetch(BLOG_URL + `blog/content/${route[0]}/${route[1]}/${route[2]}.md`);
-  if (!res.ok) return false;
-
-  return matter(await res.text());
+  return fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`)
 }
 
-export async function processContent(mat: matter.GrayMatterFile<string>){
+export async function processContent(mat: matter.GrayMatterFile<string>) {
   // cari data foodreview kalau ada
   const reviewPath = (mat.data.path as string).split('/');
   reviewPath.pop();
 
-  const reviewFetch = await fetch(`${BLOG_URL}${reviewPath.join('/')}/review.json`);
-  if (!reviewFetch.ok) return false;
-
-  const reviews = (await (reviewFetch).json()) as FoodReviewData;
+  const reviewFetch = await fetchJson<FoodReviewData>(`${reviewPath.join('/')}/review`);
+  if (!reviewFetch) return false;
 
   return {
     content: mat.content,
-    review: reviews[mat.data.date],
+    review: reviewFetch[mat.data.date],
     data: {
       title: mat.data.title,
       id: mat.data.id,
@@ -67,7 +59,7 @@ export async function processContent(mat: matter.GrayMatterFile<string>){
 
 }
 
-export default async function BlogPage({params} : {params: { route: string[] }}) {
+export default async function BlogPage({ params }: { params: { route: string[] } }) {
 
   const markdownData = await getData(params.route);
   if (markdownData === false) return notFound();

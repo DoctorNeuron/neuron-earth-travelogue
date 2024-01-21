@@ -21,5 +21,6 @@ export interface FoodReviewVendor {
   hygiene: number,
   notes?: string,
   orders: FoodReviewOrder[],
-  tax?: number
+  tax?: number,
+  service?: number
 }

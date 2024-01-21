@@ -23,20 +23,8 @@ interface BlogPageProps {
   data: MarkdownData
 }
 
-export async function generateMetadata(route: string[]) {
-  let d = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`)
-  if (d === false) return false;
-  return {
-    title: d.data.title
-  }
-}
 
-export async function getData(route: string[]) {
-  if (route.length !== 3) return false;
-  return fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`)
-}
-
-export async function processContent(mat: matter.GrayMatterFile<string>) {
+async function processContent(mat: matter.GrayMatterFile<string>) {
   // cari data foodreview kalau ada
   const reviewPath = (mat.data.path as string).split('/');
   reviewPath.pop();
@@ -59,9 +47,20 @@ export async function processContent(mat: matter.GrayMatterFile<string>) {
 
 }
 
-export default async function BlogPage({ params }: { params: { route: string[] } }) {
+export async function generateMetadata({params}: {params: {route: string[]}}) {
+  const route = params.route;
+  let d = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`)
+  if (d === false) return false;
+  return {
+    title: d.data.title
+  }
+}
 
-  const markdownData = await getData(params.route);
+export default async function BlogPage({ params }: { params: { route: string[] } }) {
+  const route = params.route;
+  if (route.length !== 3) return false;
+
+  const markdownData = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`);
   if (markdownData === false) return notFound();
 
   const finalData = await processContent(markdownData);

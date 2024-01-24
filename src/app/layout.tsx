@@ -5,6 +5,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { createContext } from 'react'
 import { AppContext } from '@/model/context'
+import Navbar from '@/components/navbar/Navbar'
+import classNames from 'classnames'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,8 +20,13 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <main className='m-12'>{children}</main>
+      <body className={classNames(inter.className, 'flex h-screen')}>
+        <Navbar/>
+        <main className='overflow-auto'>
+          <div className='m-12'>
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   )

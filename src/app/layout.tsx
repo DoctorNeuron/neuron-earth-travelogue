@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={classNames(inter.className, 'flex h-screen')}>
         <Navbar/>
         <main className='overflow-auto'>
-          <div className='m-12'>
+          <div className='m-9'>
             {children}
           </div>
         </main>

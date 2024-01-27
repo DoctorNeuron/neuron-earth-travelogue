@@ -1,6 +1,5 @@
 import { DefaultMarkdownComponents } from '@/components/blog/constant';
 import { fetchMarkdown } from '@/helper/markdown-helper';
-import { GrayMatterFile } from 'gray-matter';
 import { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';

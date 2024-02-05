@@ -12,10 +12,9 @@ export default function NavMenu({ route, depth = 0 }: { route: IRoute, depth: nu
 
   // Kalau sudah end
   if (route.subroute == null) return (
-    <Link href={route.path ?? "/"} className={classNames('pr-2 flex h-12 items-center w-full cursor-pointer', {
+    <Link href={route.path ?? "/"} className={classNames('pr-2 flex h-12 items-center w-full cursor-pointer hover:border-b-2 hover:border-b-white', {
       'pl-4': depth === 0,
       'font-bold underline': pathName === route.path,
-      'hover:border-b-2 hover:border-b-white': depth > 0,
       'pl-6': depth === 1,
       'pl-8': depth === 2,
       'pl-10': depth === 3,

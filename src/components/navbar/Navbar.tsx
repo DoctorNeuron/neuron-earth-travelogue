@@ -7,22 +7,27 @@ import classNames from 'classnames'
 
 export default function Navbar() {
 
-  const [state, setState] = useState(true);
+  const [state, setState] = useState(false);
   const handleOnClickChevron = () => setState(!state);
 
   return(
-    <div className={classNames('flex w-[16rem] max-md:w-[13rem]', {
+    <div className={classNames('flex w-[17rem] max-md:w-[13rem]', {
       'w-[2rem] max-md:w-[2rem]': !state
     })}>
       <nav className={classNames('relative h-full w-[15rem] max-md:w-[12rem] min-h-svh grid grid-rows-[6rem_auto_5rem] bg-sky-900', {
-        'hidden': !state
+        'hidden': false
       })}>
         <IconDiamond className='z-0 absolute translate-x-[-24px] translate-y-[-24px]'/>
         
         {/* Top */}
         <div className='p-4 h-full z-10'>
-          <p className='font-bold text-2xl'>Welcome</p>
-          <p className='font-italic text-xs'>Happy reading</p>
+          <div className=''>
+            <p className='font-bold text-2xl'>Welcome</p>
+            <p className='font-italic text-xs'>Happy reading</p>
+          </div>
+          <div className='x-button'>
+
+          </div>
         </div>
 
         {/* Middle */}
@@ -38,14 +43,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-      <div className="flex items-center">
-        <div
-          className="bg-sky-900 h-16 w-8 p-1 flex items-center rounded-lg rounded-tl-none rounded-bl-none text-xl"
-          onClick={handleOnClickChevron}
-        >
-          { !state ? (<ChevronCompactRight/>) : (<ChevronCompactLeft/>) }
-        </div>
-      </div>
 
     </div>
   )

@@ -18,9 +18,9 @@ export default function FoodReview(props: FoodReviewProps) {
         <span className='font-bold text-green-300'>{order.price} IDR</span>
       </span>
       <span className='italic text-xs'>{order.notes}</span>
-      <span className='grid grid-cols-2'>
+      <span className='grid grid-cols-2 max-md:grid-cols-1 max-md:grid-rows-2 max-md:gap-3'>
         <span>Taste ✨: {'⭐'.repeat(order.taste)} = {order.taste}/10</span>
-        <span className='text-right'>Worthiness 🛒: {'⭐'.repeat(order.worthiness)} = {order.worthiness}/10</span>
+        <span className='min-lg:text-right'>Worthiness 🛒: {'⭐'.repeat(order.worthiness)} = {order.worthiness}/10</span>
       </span>
     </span>
   )
@@ -31,7 +31,7 @@ export default function FoodReview(props: FoodReviewProps) {
       { props.order.notes && <h2 className='italic text-sm font-thin'>Tax: {props.order.notes}</h2> }
       { props.order.tax && <h2 className='italic text-sm font-thin'>Tax: {props.order.tax}</h2> }
       <br />
-      <span>
+      <span className=''>
         <span className='grid grid-cols-[3fr_5fr_5fr_5fr]'>
           <p>Hygiene 🚿:</p>
           <p>{'⭐'.repeat(props.order.hygiene)}</p>

@@ -26,7 +26,6 @@ interface BlogPageProps {
 
 async function processContent(mat: matter.GrayMatterFile<string>) {
   const reviewPath = (mat.data.path as string).split('/');
-  console.log(reviewPath);
   reviewPath.pop();
 
   const reviewFetch = await fetchJson<FoodReviewData>(`${reviewPath.join('/')}/review`);

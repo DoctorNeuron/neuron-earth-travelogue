@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 
-export const BLOG_URL = "https://raw.githubusercontent.com/DoctorNeuron/neuron-earth-travelogue-content/master/";
+// export const BLOG_URL = "https://raw.githubusercontent.com/DoctorNeuron/neuron-earth-travelogue-content/dev/";
+export const BLOG_URL = "http://localhost:12345/";
 export const fetchMarkdown = async (route: string, extension: 'md' | 'mdx' = 'md') => {
   if (extension != 'md' && extension != 'mdx') return false;
 

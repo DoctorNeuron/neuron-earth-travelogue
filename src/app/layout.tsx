@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import NavbarNew from '@/components/navbar-new/NavbarNew'
 import { useGlobalStore } from '@/utilities/store'
 import { SkeletonTheme } from 'react-loading-skeleton'
+import ModalPhoto from '@/components/modal-photo/ModalPhoto'
 
 const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({
@@ -19,17 +20,22 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={classNames(inter.className, 'flex h-screen bg-[#1d1d1f]')}>
-        <SkeletonTheme baseColor='#262729' highlightColor='#383a3d'>
-          <NavbarNew />
-          <main className={classNames('overflow-auto w-full', {
-            'max-md:hidden': !collapse
-          })}>
-            <div className='m-9'>
-              {children}
-            </div>
-          </main>
-        </SkeletonTheme>
+      <body className={classNames(inter.className, 'bg-[#1d1d1f]')}>
+        <div className='relative flex h-screen z-2'>
+          <SkeletonTheme baseColor='#262729' highlightColor='#383a3d'>
+            <NavbarNew />
+            <main className={classNames('overflow-auto w-full', {
+              'max-md:hidden': !collapse
+            })}>
+              <div className='m-9'>
+                {children}
+              </div>
+            </main>
+          </SkeletonTheme>
+        </div>
+        <div>
+          {/* <ModalPhoto/> */}
+        </div>
       </body>
     </html>
   )

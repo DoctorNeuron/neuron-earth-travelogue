@@ -23,7 +23,7 @@ function TransportationPoint({ name, order, length }: { name: string, order: num
           {/* Line */}
           {
             order !== length - 1 &&
-            <div className='absolute w-28 border-[1px] border-white border-solid z-1 top-0.5 left-2'></div>
+            <div className='absolute w-28 border-[1px] border-white border-solid z-1 top-1/2 left-2'></div>
           }
         </div>
       </div>

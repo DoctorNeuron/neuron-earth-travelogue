@@ -29,6 +29,6 @@ export const DefaultMarkdownComponents = {
   h2: (pr: any) => (<h2 className='font-bold text-xl mt-8'>{pr.children}</h2>),
   h3: (pr: any) => (<h3 className='font-bold text-lg italic mb-4'>{pr.children}</h3>),
   ul: (pr: any) => (<ul className='text-justify gap-3'>{pr.children}</ul>),
-  li: (pr: any) => (<li className='text-justify mb-4 last:mb-8'>{pr.children}</li>),
+  li: (pr: any) => (<li className='text-justify mb-4 last:mb-8 list-disc ml-5'>{pr.children}</li>),
   Citation: (pr: any) => (<span>1</span>)
 };

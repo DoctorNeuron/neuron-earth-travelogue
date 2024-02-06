@@ -8,26 +8,26 @@ import Image from 'next/image';
 
 export default function Navbar() {
 
-  const [state, setState] = useState(true);
+  const [state, setState] = useState(false);
   const handleOnClickChevron = () => setState(!state);
 
   return(
-    <div className={classNames('flex', {
+    <div className={classNames('flex w-[17rem] max-md:w-[13rem]', {
       'w-[2rem] max-md:w-[2rem]': !state
     })}>
       <nav className={classNames('relative h-full w-[15rem] max-md:w-[12rem] min-h-svh grid grid-rows-[6rem_auto_5rem] bg-sky-900', {
-        'hidden': !state
+        'hidden': false
       })}>
         <IconDiamond className='z-0 absolute translate-x-[-24px] translate-y-[-24px]'/>
         
         {/* Top */}
-        <div className='h-full z-10 relative'>
-          {/* <div className='z-[5]'>
-            <Image className='absolute w-full' src="/flag_ps.svg" alt='a' fill={true} />
-          </div> */}
-          <div className="p-4 z-[8]">
-            <p className='font-bold text-2xl'>Neu-Lore</p>
+        <div className='p-4 h-full z-10'>
+          <div className=''>
+            <p className='font-bold text-2xl'>Welcome</p>
             <p className='font-italic text-xs'>Happy reading</p>
+          </div>
+          <div className='x-button'>
+
           </div>
         </div>
 
@@ -44,14 +44,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-      <div className="flex items-center cursor-pointer">
-        <div
-          className="bg-sky-900 h-16 w-8 p-1 flex items-center rounded-lg rounded-tl-none rounded-bl-none text-xl"
-          onClick={handleOnClickChevron}
-        >
-          { !state ? (<ChevronCompactRight/>) : (<ChevronCompactLeft/>) }
-        </div>
-      </div>
 
     </div>
   )

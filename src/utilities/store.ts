@@ -24,7 +24,7 @@ export const useGlobalStore = create<IGlobalStore>()(
       picturePopup: "",
       setNavbarCollapse: () => set((state) => ({ navbarCollapse: !state.navbarCollapse })),
       setCurrency: (currency: ICurrency) => set(() => ({ currency: currency })),
-      setPicturePopup: (source: string) => set(() => ({ picturePopup: source })),
+      setPicturePopup: (source: string = "") => set(() => ({ picturePopup: source })),
     }),
     {
       name: 'global-storage'

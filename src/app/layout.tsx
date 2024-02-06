@@ -34,7 +34,7 @@ export default function RootLayout({
           </SkeletonTheme>
         </div>
         <div>
-          {/* <ModalPhoto/> */}
+          <ModalPhoto/>
         </div>
       </body>
     </html>

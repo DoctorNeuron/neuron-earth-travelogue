@@ -1,13 +1,14 @@
-import React, { cache } from 'react'
+import React from 'react'
 import matter from 'gray-matter';
 import { DateTime } from 'luxon';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import FoodReview from '../../../components/blog/food-review/FoodReview';
-import ImageCaption from '@/components/blog/image-caption/ImageCaption';
 import { FoodReviewData, FoodReviewVendor } from '@/model/food-review';
 import { notFound } from 'next/navigation';
-import { BLOG_URL, fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
+import { fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
 import { DefaultMarkdownComponents } from '@/components/blog/constant';
+import { TransportationList, TransportationMode } from '@/model/transportation';
+import Transportation from '@/components/blog/transportation/Transportation';
 
 interface MarkdownData {
   title: string,
@@ -21,6 +22,7 @@ interface MarkdownData {
 interface BlogPageProps {
   content: string,
   review: { [key: string]: FoodReviewVendor },
+  transportation: { [key: string]: TransportationMode }
   data: MarkdownData
 }
 
@@ -31,9 +33,15 @@ async function processContent(mat: matter.GrayMatterFile<string>) {
   const reviewFetch = await fetchJson<FoodReviewData>(`${reviewPath.join('/')}/review`);
   if (!reviewFetch) return false;
 
+  const transportFetch = await fetchJson<TransportationList>(`${reviewPath.join('/')}/transportation`);
+  if (!transportFetch) return false;
+
+  // console.log(transportFetch[mat.data.date]['bus-1'].routes);
+
   return {
     content: mat.content,
     review: reviewFetch[mat.data.date],
+    transportation: transportFetch[mat.data.date],
     data: {
       title: mat.data.title,
       id: mat.data.id,
@@ -69,7 +77,11 @@ export default async function BlogPage({ params }: { params: { route: string[] }
     FoodReview: async (pr: any) => {
       let id = pr.id as string;
       return <FoodReview id={id} order={finalData.review[id]} />
-    }
+    },
+    Transportation: (pr: any) => {
+      let id = pr.id as string;
+      return finalData.transportation[id] !== null ? <Transportation id={id} data={finalData.transportation[id]}/> : <p>Not Found</p>;
+    },
   };
 
   return (

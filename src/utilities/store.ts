@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-export type ICurrency = "-" | "idr" | "sgd" | "usd";
+export type ICurrency =
+  "-" | "idr" | "sgd" | "usd";
 
 export interface IGlobalStore {
 
@@ -27,7 +28,10 @@ export const useGlobalStore = create<IGlobalStore>()(
       setPicturePopup: (source: string = "") => set(() => ({ picturePopup: source })),
     }),
     {
-      name: 'global-storage'
+      name: 'global-storage',
+      partialize: (state) => ({
+        currency: state.currency
+      })
     }
   )
 )

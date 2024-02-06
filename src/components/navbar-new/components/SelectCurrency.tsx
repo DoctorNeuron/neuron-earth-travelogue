@@ -17,7 +17,7 @@ export default function SelectCurrency() {
   }
 
   return (
-    <select className='bg-gray-500 rounded-sm p-1' onChange={onChangeCurrency}>
+    <select className='bg-gray-500 rounded-sm p-1' onChange={onChangeCurrency} value={currency}>
       {CurrencyOptions.map(x => (<option value={x} key={x}>{x.toUpperCase()}</option>))}
     </select>
   )

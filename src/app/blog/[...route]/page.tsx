@@ -9,6 +9,8 @@ import { fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
 import { DefaultMarkdownComponents } from '@/components/blog/constant';
 import { TransportationList, TransportationMode } from '@/model/transportation';
 import Transportation from '@/components/blog/transportation/Transportation';
+import { CitationData, CitationList } from '@/model/citation';
+import Citation from '@/components/citation/Citation';
 
 interface MarkdownData {
   title: string,
@@ -22,7 +24,8 @@ interface MarkdownData {
 interface BlogPageProps {
   content: string,
   review: { [key: string]: FoodReviewVendor },
-  transportation: { [key: string]: TransportationMode }
+  transportation: { [key: string]: TransportationMode },
+  citation: { [key: string]: CitationData },
   data: MarkdownData
 }
 
@@ -36,12 +39,14 @@ async function processContent(mat: matter.GrayMatterFile<string>) {
   const transportFetch = await fetchJson<TransportationList>(`${reviewPath.join('/')}/transportation`);
   if (!transportFetch) return false;
 
-  // console.log(transportFetch[mat.data.date]['bus-1'].routes);
+  const citationFetch = await fetchJson<CitationList>(`${reviewPath.join('/')}/citation`);
+  if (!citationFetch) return false;
 
   return {
     content: mat.content,
     review: reviewFetch[mat.data.date],
     transportation: transportFetch[mat.data.date],
+    citation: citationFetch[mat.data.date],
     data: {
       title: mat.data.title,
       id: mat.data.id,
@@ -54,7 +59,7 @@ async function processContent(mat: matter.GrayMatterFile<string>) {
 
 }
 
-export async function generateMetadata({params}: {params: {route: string[]}}) {
+export async function generateMetadata({ params }: { params: { route: string[] } }) {
   const route = params.route;
   let d = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}`)
   if (d === false) return false;
@@ -73,14 +78,20 @@ export default async function BlogPage({ params }: { params: { route: string[] }
   const finalData = await processContent(markdownData);
   if (finalData === false) return notFound();
 
-  const usedComponents = { ...DefaultMarkdownComponents,
+  const usedComponents = {
+    ...DefaultMarkdownComponents,
     FoodReview: async (pr: any) => {
       let id = pr.id as string;
       return <FoodReview id={id} order={finalData.review[id]} />
     },
     Transportation: (pr: any) => {
       let id = pr.id as string;
-      return finalData.transportation[id] !== null ? <Transportation id={id} data={finalData.transportation[id]}/> : <p>Not Found</p>;
+      return finalData.transportation[id] !== null ? <Transportation id={id} data={finalData.transportation[id]} /> : <p>Not Found</p>;
+    },
+    Citation: (pr: any) => {
+      let id = pr.id as string;
+      let citation = finalData.citation[id];
+      return <Citation url={citation.url as string} id={id} />
     },
   };
 

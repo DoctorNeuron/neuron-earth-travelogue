@@ -28,13 +28,5 @@ export const AppRoutes : IRoute[] = [
         ]
       }
     ]
-  },
-  {
-    name: "Let Neuron Cook",
-    path: "/"
-  },
-  {
-    name: "Database",
-    path: "/"
-  },
+  }
 ]

@@ -1,13 +1,16 @@
+import React from 'react'
 import { AppRoutes } from '@/app/routes'
-import React, { useContext, useState } from 'react'
 import NavMenu from './components/NavMenu'
 import { ChevronLeft, ChevronRight } from 'react-bootstrap-icons'
 import classNames from 'classnames';
 import SelectCurrency from './components/SelectCurrency';
 import { useGlobalStore } from '@/utilities/store';
+import NavMenuWrapper from './components/NavMenuWrapper';
 
 export default function NavbarNew() {
   const [collapse, setCollapse] = useGlobalStore(s => [s.navbarCollapse, s.setNavbarCollapse]);
+
+  
 
   return (
     <nav className={classNames('grid grid-rows-[5rem_auto_4rem] gap-2 bg-[#232529]', {
@@ -31,7 +34,7 @@ export default function NavbarNew() {
 
       {/* Middle */}
       <div className={classNames({ 'hidden': collapse })}>
-        {AppRoutes.map(x => (<NavMenu route={x} key={`0${x.name}`} depth={0} />))}
+        <NavMenuWrapper/>
       </div>
 
       {/* Bottom */}

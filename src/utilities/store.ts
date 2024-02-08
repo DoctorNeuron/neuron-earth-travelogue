@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
 
 export type ICurrency =
-  "-" | "idr" | "sgd" | "usd";
+  "-" | "idr" | "sgd" | "usd" | "sar" | "try" | "eur" | "myr";
 
 export interface IGlobalStore {
 
@@ -18,20 +18,22 @@ export interface IGlobalStore {
 }
 
 export const useGlobalStore = create<IGlobalStore>()(
-  persist(
-    (set) => ({
-      navbarCollapse: false,
-      currency: "-",
-      picturePopup: "",
-      setNavbarCollapse: () => set((state) => ({ navbarCollapse: !state.navbarCollapse })),
-      setCurrency: (currency: ICurrency) => set(() => ({ currency: currency })),
-      setPicturePopup: (source: string = "") => set(() => ({ picturePopup: source })),
-    }),
-    {
-      name: 'global-storage',
-      partialize: (state) => ({
-        currency: state.currency
-      })
-    }
+  subscribeWithSelector(
+    persist(
+      (set) => ({
+        navbarCollapse: false,
+        currency: "-",
+        picturePopup: "",
+        setNavbarCollapse: () => set((state) => ({ navbarCollapse: !state.navbarCollapse })),
+        setCurrency: (currency: ICurrency) => set(() => ({ currency: currency })),
+        setPicturePopup: (source: string = "") => set(() => ({ picturePopup: source })),
+      }),
+      {
+        name: 'global-storage',
+        partialize: (state) => ({
+          currency: state.currency
+        })
+      }
+    )
   )
 )

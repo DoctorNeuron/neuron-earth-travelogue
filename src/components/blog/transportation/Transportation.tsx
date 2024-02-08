@@ -1,5 +1,8 @@
 import { TransportationMode } from '@/model/transportation'
+import { transformCurrency } from '@/utilities/currency'
+import { ICurrency, useGlobalStore } from '@/utilities/store'
 import classNames from 'classnames'
+import { cookies } from 'next/headers'
 import React from 'react'
 
 export interface TransportationProps {
@@ -36,9 +39,10 @@ function TransportationPoint({ name, order, length }: { name: string, order: num
   )
 }
 
-export default function Transportation(props: TransportationProps) {
+export default async function Transportation(props: TransportationProps) {
 
-  if (props.data === undefined) return <p>{props.id}</p>
+  let price = await transformCurrency(props.data.price, props.data.currency ?? "idr", (cookies().get('currency')?.value ?? "-") as ICurrency);
+
   return (
     <div className='w-full'>
       <div className={classNames('p-3 w-full rounded-lg flex flex-col border-spacing-5 border-2 border-slate-100', {
@@ -47,10 +51,12 @@ export default function Transportation(props: TransportationProps) {
       })}>
         <div className='flex justify-between'>
           <h1 className='font-bold'>{
-
-
+            props.data.type === 'bus' ? "Bus" :
+              props.data.type === 'lrt' ? "LRT" :
+                props.data.type === 'mrt' ? "MRT" :
+                  props.data.type === 'train' ? "Train" : ""
           }</h1>
-          <h2 className='font-bold text-green-300'>3500 IDR</h2>
+          <h2 className='font-bold text-green-300'>{price}</h2>
         </div>
 
         {props.data.routes.map(r =>

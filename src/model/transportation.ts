@@ -9,7 +9,7 @@ export interface TransportationRoute {
 export interface TransportationMode {
   type: "bus" | "mrt" | "train" | "lrt",
   price: number,
-  currency: Omit<ICurrency, "-">,
+  currency: ICurrency,
   routes: TransportationRoute[]
 }
 

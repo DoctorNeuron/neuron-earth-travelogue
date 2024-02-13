@@ -1,12 +1,16 @@
-import React, { cache } from 'react'
+import React from 'react'
 import matter from 'gray-matter';
 import { DateTime } from 'luxon';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import FoodReview from '../../../components/blog/food-review/FoodReview';
-import ImageCaption from '@/components/blog/image-caption/ImageCaption';
 import { FoodReviewData, FoodReviewVendor } from '@/model/food-review';
 import { notFound } from 'next/navigation';
-import { BLOG_URL, fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
+import { fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
+import { DefaultMarkdownComponents } from '@/components/blog/constant';
+import { TransportationList, TransportationMode } from '@/model/transportation';
+import Transportation from '@/components/blog/transportation/Transportation';
+import { CitationData, CitationList } from '@/model/citation';
+import Citation from '@/components/citation/Citation';
 
 interface MarkdownData {
   title: string,
@@ -20,21 +24,29 @@ interface MarkdownData {
 interface BlogPageProps {
   content: string,
   review: { [key: string]: FoodReviewVendor },
+  transportation: { [key: string]: TransportationMode },
+  citation: { [key: string]: CitationData },
   data: MarkdownData
 }
 
-
 async function processContent(mat: matter.GrayMatterFile<string>) {
-  // cari data foodreview kalau ada
   const reviewPath = (mat.data.path as string).split('/');
   reviewPath.pop();
 
   const reviewFetch = await fetchJson<FoodReviewData>(`${reviewPath.join('/')}/review`);
   if (!reviewFetch) return false;
 
+  const transportFetch = await fetchJson<TransportationList>(`${reviewPath.join('/')}/transportation`);
+  if (!transportFetch) return false;
+
+  const citationFetch = await fetchJson<CitationList>(`${reviewPath.join('/')}/citation`);
+  if (!citationFetch) return false;
+
   return {
     content: mat.content,
     review: reviewFetch[mat.data.date],
+    transportation: transportFetch[mat.data.date],
+    citation: citationFetch[mat.data.date],
     data: {
       title: mat.data.title,
       id: mat.data.id,
@@ -47,9 +59,9 @@ async function processContent(mat: matter.GrayMatterFile<string>) {
 
 }
 
-export async function generateMetadata({params}: {params: {route: string[]}}) {
+export async function generateMetadata({ params }: { params: { route: string[] } }) {
   const route = params.route;
-  let d = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`)
+  let d = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}`)
   if (d === false) return false;
   return {
     title: d.data.title
@@ -58,37 +70,29 @@ export async function generateMetadata({params}: {params: {route: string[]}}) {
 
 export default async function BlogPage({ params }: { params: { route: string[] } }) {
   const route = params.route;
-  if (route.length !== 3) return false;
+  if (route.length !== 2) return notFound();
 
-  const markdownData = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}/${route[2]}`);
+  const markdownData = await fetchMarkdown(`blog/content/${route[0]}/${route[1]}`);
   if (markdownData === false) return notFound();
 
   const finalData = await processContent(markdownData);
   if (finalData === false) return notFound();
 
   const usedComponents = {
+    ...DefaultMarkdownComponents,
     FoodReview: async (pr: any) => {
       let id = pr.id as string;
       return <FoodReview id={id} order={finalData.review[id]} />
     },
-    img: (pr: any) => {
-      let realProps = pr as { src: string, alt: string };
-      let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
-      let start = pathRegex.exec(realProps.src) ?? [];
-      let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-      return <ImageCaption src={newPath} caption={realProps.alt} />
+    Transportation: (pr: any) => {
+      let id = pr.id as string;
+      return finalData.transportation[id] !== null ? <Transportation id={id} data={finalData.transportation[id]} /> : <p>Not Found</p>;
     },
-    Image: (pr: any) => {
-      let realProps = pr as { src: string, alt: string };
-      let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
-      let start = pathRegex.exec(realProps.src) ?? [];
-      let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-      return <ImageCaption src={newPath} caption={realProps.alt} />
+    Citation: (pr: any) => {
+      let id = pr.id as string;
+      let citation = finalData.citation[id];
+      return <Citation url={citation.url as string} id={id} />
     },
-    p: (pr: any) => (<p className='text-justify mt-2 mb-2'>{pr.children}</p>),
-    h1: (pr: any) => (<h1 className='font-bold text-4xl'>{pr.children}</h1>),
-    h2: (pr: any) => (<h2 className='font-bold text-xl mt-8'>{pr.children}</h2>),
-    h3: (pr: any) => (<h3 className='font-bold text-lg italic mb-4'>{pr.children}</h3>),
   };
 
   return (

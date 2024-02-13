@@ -1,3 +1,5 @@
+import { ICurrency } from "@/utilities/store"
+
 export interface FoodReviewData {
   
   /** dd-mmm-yy of my visit */
@@ -23,4 +25,5 @@ export interface FoodReviewVendor {
   orders: FoodReviewOrder[],
   tax?: number,
   service?: number
+  currency?: ICurrency
 }

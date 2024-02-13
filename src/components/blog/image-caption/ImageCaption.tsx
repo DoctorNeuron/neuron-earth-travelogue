@@ -1,5 +1,6 @@
 'use client'
 
+import { useGlobalStore } from '@/utilities/store'
 import Image from 'next/image'
 import React, { useState } from 'react'
 
@@ -10,14 +11,11 @@ export interface ImageCaptionProps {
 
 export default function ImageCaption(props: ImageCaptionProps) {
 
-  const handleOnClickImage = () => {
-    
-  }
-
+  const setPic = useGlobalStore(x => x.setPicturePopup);
   return (
     <>
       <span className="flex justify-center items-center flex-col w-full mt-3 mb-3">
-        <Image src={props.src} alt={props.caption} width={300} height={500} onClick={handleOnClickImage} className='rounded-md mb-1 cursor-pointer'/>
+        <Image src={props.src} alt={props.caption} width={300} height={500} onClick={() => { setPic(props.src) }} className='rounded-md mb-1 cursor-pointer'/>
         <span className="italic font-thin text-sm">{props.caption}</span>
       </span>
     </>

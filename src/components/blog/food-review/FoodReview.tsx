@@ -11,18 +11,19 @@ export interface FoodReviewProps {
 
 export default async function FoodReview(props: FoodReviewProps) {
 
+  const reviewCurrency = props.order.currency ?? "idr";
   const cookieCurrency = (cookies().get('currency')?.value ?? "-") as ICurrency;
   const sum = props.order.orders.reduce<number>((acc, val) => acc + val.price, 0);
   const tax = props.order.tax ? Math.round(sum * props.order.tax / 100) : 0;
   const total = sum + tax;
-  const sumText = await transformCurrency(sum, "idr", cookieCurrency);
-  const taxText = await transformCurrency(tax, "idr", cookieCurrency);
-  const totalText = await transformCurrency(total, "idr", cookieCurrency);
+  const sumText = await transformCurrency(sum, reviewCurrency, cookieCurrency);
+  const taxText = await transformCurrency(tax, reviewCurrency, cookieCurrency);
+  const totalText = await transformCurrency(total, reviewCurrency, cookieCurrency);
 
 
   // Menu
   const renderOrders = async (order: FoodReviewOrder) => {
-    const pr = await transformCurrency(order.price, "idr", cookieCurrency);
+    const pr = await transformCurrency(order.price, reviewCurrency, cookieCurrency);
     return (
       <span className='flex flex-col border-b-2 pt-2 pb-2'>
         <span className='flex justify-between text-lg gap-4'>

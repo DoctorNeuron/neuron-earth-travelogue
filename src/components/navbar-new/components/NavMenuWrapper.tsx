@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import NavMenu from './NavMenu';
 import Skeleton from 'react-loading-skeleton';
 
-const BLOG_URL = "http://localhost:12345/blog/";
+const BLOG_URL =`${process.env.NEXT_PUBLIC_BLOG_URL}blog/`;
 async function getRoutes() {
   let data = await (await fetch(BLOG_URL + "routes.json")).json()
   return data["router"] as IRoute[];

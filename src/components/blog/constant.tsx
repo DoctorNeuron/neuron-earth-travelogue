@@ -1,4 +1,3 @@
-import { BLOG_URL } from '@/helper/markdown-helper';
 import React from 'react';
 import ImageCaption from './image-caption/ImageCaption';
 import VideoPlayer from '../video-player/VideoPlayer';
@@ -9,15 +8,15 @@ export const DefaultMarkdownComponents = {
     let realProps = pr as { src: string, alt: string };
     let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
     let start = pathRegex.exec(realProps.src) ?? [];
-    let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
+    let newPath = process.env.NEXT_PUBLIC_BLOG_URL + "blog/" + (start == null ? "" : start[2]);
     return <ImageCaption src={newPath} caption={realProps.alt} />
   },
   Video: (pr: any) => {
     let realProps = pr as { src: string, alt: string };
     let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
     let start = pathRegex.exec(realProps.src) ?? [];
-    let newPath = BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <VideoPlayer url={newPath} />
+    let newPath = process.env.NEXT_PUBLIC_BLOG_URL + "blog/" + (start == null ? "" : start[2]);
+    return <VideoPlayer url={newPath} title={pr.title ?? ''} />
   },
   p: (pr: any) => (<p className='text-justify mt-2 mb-2'>{pr.children}</p>),
   h1: (pr: any) => (<h1 className='font-bold text-4xl'>{pr.children}</h1>),

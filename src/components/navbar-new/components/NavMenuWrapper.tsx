@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import NavMenu from './NavMenu';
 import Skeleton from 'react-loading-skeleton';
 
-const BLOG_URL =`${process.env.NEXT_PUBLIC_BLOG_URL}blog/`;
+const BLOG_URL =`${process.env.NEXT_PUBLIC_BLOG_URL}`;
 async function getRoutes() {
   let data = await (await fetch(BLOG_URL + "routes.json")).json()
   return data["router"] as IRoute[];
@@ -13,7 +13,7 @@ export default function NavMenuWrapper() {
   const [route, setRoute] = useState<IRoute[]>([])
 
   useEffect(() => {
-    fetch(BLOG_URL + "routes.json")
+    fetch(BLOG_URL + "/routes.json")
       .then(r => r.json())
       .then(d => {
         setRoute(d["router"] as IRoute[])

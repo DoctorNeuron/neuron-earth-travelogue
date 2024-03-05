@@ -31,3 +31,11 @@ body {
 ::-webkit-scrollbar- {
   background: white;
 }
+
+a {
+  color: rgb(232, 197, 3);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -144,7 +144,7 @@ function GetData() {
 
 export default function DatabasePage() {
 
-  const [data, setData] = useState(GetData());
+  const [data, _] = useState(GetData());
   const colHelper = createColumnHelper<SimpleProduct>();
   const columns = [
     colHelper.accessor('id', {
@@ -169,7 +169,6 @@ export default function DatabasePage() {
         <div className='text-center'>{i.getValue()}</div>
       ),
       header: 'Hunger',
-
     })
   ];
 

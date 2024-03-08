@@ -24,13 +24,15 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   background: none;
+  width: 10px;
 }
 
-::-webkit-scrollbar- {
-  background: white;
-}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.045);
+  border-radius: 50px;
+} */
 
 a {
   color: rgb(232, 197, 3);

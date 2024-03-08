@@ -18,7 +18,7 @@ export default function ModalPhoto() {
         </div>
         <div className='overflow-hidden rounded-bl-md rounded-br-md'>
           <div className='overflow-hidden'>
-            <Image src={pic} alt="" width={500} height={700} className='overflow-hidden' />
+            <Image src={pic} alt="" sizes='100' width={0} height={0} className='overflow-hidden w-full max-w-[700px] max-h-[600px]' />
           </div>
         </div>
       </div>

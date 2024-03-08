@@ -60,7 +60,7 @@ export default async function Transportation(props: TransportationProps) {
         </div>
 
         {props.data.routes.map(r =>
-          <div className='flex overflow-x-scroll pt-3' key={r.name}>
+          <div className='flex overflow-x-scroll scrollbar scrollbar-track-transparent scrollbar-thumb-gray-700/30 pt-3' key={r.name}>
             {r.route.map((x, idx, arr) => (<TransportationPoint name={x} key={idx} order={idx} length={arr.length} />))}
           </div>
         )}

@@ -24,7 +24,7 @@ export default function RootLayout({
         <div className='relative flex h-screen z-2'>
           <SkeletonTheme baseColor='#262729' highlightColor='#383a3d'>
             <NavbarNew />
-            <main className={classNames('overflow-auto w-full', {
+            <main className={classNames('overflow-auto w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-800 scrollbar-thumb-rounded-full', {
               'max-md:hidden': !collapse
             })}>
               <div className='m-9'>

@@ -48,8 +48,8 @@ export default async function FoodReview(props: FoodReviewProps) {
       <span className='max-md:flex max-md:flex-col max-md:gap-3'>
         <span className='grid grid-cols-[3fr_5fr_5fr_5fr] max-md:flex'>
           <p>Hygiene 🚿:</p>
-          <p>{'⭐'.repeat(props.order.hygiene)}</p>
-          <p className='max-md:hidden'> = {props.order.hygiene}/10</p>
+          <p>{'⭐'.repeat(props.order.hygiene ?? 7)}</p>
+          <p className='max-md:hidden'> = {props.order.hygiene ?? 7}/10</p>
         </span>
         <span className='grid grid-cols-[3fr_5fr_5fr_5fr] max-md:flex'>
           <p>Service 😀:</p>

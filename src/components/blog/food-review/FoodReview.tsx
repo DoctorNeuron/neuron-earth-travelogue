@@ -1,7 +1,7 @@
 import { FoodReviewOrder, FoodReviewVendor } from '@/model/food-review'
 import { transformCurrency } from '@/utilities/currency';
 import { ICurrency } from '@/utilities/store';
-import { cookies } from 'next/headers';
+import { getCookie } from 'cookies-next';
 import React from 'react'
 
 export interface FoodReviewProps {
@@ -12,14 +12,13 @@ export interface FoodReviewProps {
 export default async function FoodReview(props: FoodReviewProps) {
 
   const reviewCurrency = props.order.currency ?? "idr";
-  const cookieCurrency = (cookies().get('currency')?.value ?? "-") as ICurrency;
+  const cookieCurrency = ("idr") as ICurrency;
   const sum = props.order.orders.reduce<number>((acc, val) => acc + val.price, 0);
   const tax = props.order.tax ? Math.round(sum * props.order.tax / 100) : 0;
   const total = sum + tax;
   const sumText = await transformCurrency(sum, reviewCurrency, cookieCurrency);
   const taxText = await transformCurrency(tax, reviewCurrency, cookieCurrency);
   const totalText = await transformCurrency(total, reviewCurrency, cookieCurrency);
-
 
   // Menu
   const renderOrders = async (order: FoodReviewOrder) => {

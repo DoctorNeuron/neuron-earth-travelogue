@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import ReactPlayer from 'react-player'
+import Video from 'next-video';
 
 export interface VideoPlayerProps {
   url: string,
@@ -18,9 +18,11 @@ export default function VideoPlayer(props: VideoPlayerProps) {
     <div>
 
       {!isYoutube &&
-        <video controls={true} muted={true} className='w-full max-h-[300px]'>
-          <source src={props.url} />
-        </video>
+        // <video controls={true} muted={true} className='w-full max-h-[300px]'>
+        //   <source src={props.url} />
+        // </video>
+        <Video src={props.url}>
+        </Video>
       }
       {
         isYoutube &&

@@ -1,9 +1,9 @@
 import { TransportationMode } from '@/model/transportation'
 import { transformCurrency } from '@/utilities/currency'
-import { ICurrency, useGlobalStore } from '@/utilities/store'
+import { ICurrency } from '@/utilities/store'
 import classNames from 'classnames'
-import { cookies } from 'next/headers'
-import React from 'react'
+import { getCookie } from 'cookies-next'
+import React, { useEffect, useState } from 'react'
 
 export interface TransportationProps {
   id: string,
@@ -39,9 +39,14 @@ function TransportationPoint({ name, order, length }: { name: string, order: num
   )
 }
 
-export default async function Transportation(props: TransportationProps) {
+export default function Transportation(props: TransportationProps) {
 
-  let price = await transformCurrency(props.data.price, props.data.currency ?? "idr", (cookies().get('currency')?.value ?? "-") as ICurrency);
+  const [price, setPrice] = useState("0")
+
+  // let price = await transformCurrency(props.data.price, props.data.currency ?? "idr", ("idr") as ICurrency);
+  useEffect(() => {
+    transformCurrency(props.data.price, props.data.currency ?? "idr", ("idr") as ICurrency).then(x => setPrice(x));
+  });
 
   return (
     <div className='w-full'>

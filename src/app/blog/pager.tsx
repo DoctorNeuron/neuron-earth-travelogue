@@ -1,7 +1,6 @@
 import { DefaultMarkdownComponents } from '@/components/blog/constant';
 import { fetchMarkdown } from '@/helper/markdown-helper';
 import { Metadata } from 'next';
-import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 import React from 'react'
 
@@ -20,6 +19,6 @@ export default async function FAQPage() {
   }
 
   return (
-    <MDXRemote source={markdownData.content} components={usedComponents}/>
+    <p>A</p>
   )
 }

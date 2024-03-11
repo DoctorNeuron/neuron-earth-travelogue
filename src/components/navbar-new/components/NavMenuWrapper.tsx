@@ -2,11 +2,12 @@ import { IRoute } from '@/app/routes';
 import React, { useEffect, useState } from 'react'
 import NavMenu from './NavMenu';
 import Skeleton from 'react-loading-skeleton';
+import { useGlobalStore } from '@/utilities/store';
 
 const BLOG_URL =`${process.env.NEXT_PUBLIC_BLOG_URL}`;
 
 export default function NavMenuWrapper() {
-  const [route, setRoute] = useState<IRoute[]>([])
+  const [route, setRoute] = useState<IRoute[]>([]);
 
   useEffect(() => {
     fetch(BLOG_URL + "/routes.json", {

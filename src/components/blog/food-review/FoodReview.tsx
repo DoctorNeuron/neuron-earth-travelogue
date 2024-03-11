@@ -33,8 +33,8 @@ export default function FoodReview(props: FoodReviewProps) {
         </span>
         <span className='italic text-xs'>{order.notes}</span>
         <span className='flex justify-between gap-5 max-md:grid-cols-1 max-md:grid-rows-2 max-md:gap-3'>
-          <span>Taste ✨: {'⭐'.repeat(order.taste)} = {order.taste}/10</span>
-          <span className='min-lg:text-right'>Worthiness 🛒: {'⭐'.repeat(order.worthiness)} = {order.worthiness}/10</span>
+          <span>Taste ✨: <span className='max-sm:hidden'>{'⭐'.repeat(order.taste)} =</span> {order.taste}/10</span>
+          <span className='min-lg:text-right'>Worthiness 🛒: <span className='max-sm:hidden'>{'⭐'.repeat(order.worthiness)} =</span> {order.worthiness}/10</span>
         </span>
       </span>
     )
@@ -49,13 +49,13 @@ export default function FoodReview(props: FoodReviewProps) {
       <span className='max-md:flex max-md:flex-col max-md:gap-3'>
         <span className='grid grid-cols-[3fr_5fr_5fr_5fr] max-md:flex'>
           <p>Hygiene 🚿:</p>
-          <p>{'⭐'.repeat(props.order.hygiene ?? 7)}</p>
-          <p className='max-md:hidden'> = {props.order.hygiene ?? 7}/10</p>
+          <p className='max-sm:hidden'>{'⭐'.repeat(props.order.hygiene ?? 7)}</p>
+          <p> = {props.order.hygiene ?? 7}/10</p>
         </span>
         <span className='grid grid-cols-[3fr_5fr_5fr_5fr] max-md:flex'>
           <p>Service 😀:</p>
-          <p>{'⭐'.repeat(props.order.service ?? 7)}</p>
-          <p className='max-md:hidden'> = {props.order.service ?? 7}/10</p>
+          <p className='max-sm:hidden'>{'⭐'.repeat(props.order.service ?? 7)}</p>
+          <p> = {props.order.service ?? 7}/10</p>
         </span>
       </span>
       <br />

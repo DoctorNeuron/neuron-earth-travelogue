@@ -1,8 +1,7 @@
 import { TransportationMode } from '@/model/transportation'
-import { getCurrencyRate, transformCurrency, transformMoney } from '@/utilities/currency'
-import { ICurrency, useGlobalStore } from '@/utilities/store'
+import { getCurrencyRate, transformMoney } from '@/utilities/currency'
+import { useGlobalStore } from '@/utilities/store'
 import classNames from 'classnames'
-import { getCookie } from 'cookies-next'
 import React, { useEffect, useState } from 'react'
 
 export interface TransportationProps {

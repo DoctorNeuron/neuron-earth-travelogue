@@ -1,3 +1,4 @@
+import { CURRENCY_DEFAULT } from "@/constant/default";
 import { ICurrency } from "./store";
 
 export async function transformCurrency(value: number, from: ICurrency, to: ICurrency): Promise<string> {
@@ -15,5 +16,6 @@ export async function getCurrencyRate(from: ICurrency){
 }
 
 export function transformMoney(exchange: {[key: string] : number}, value: number, to: ICurrency){
+  to = to === '-' ? CURRENCY_DEFAULT : to;
   return (value * exchange[to]).toFixed(2) + " " + to.toUpperCase();
 }

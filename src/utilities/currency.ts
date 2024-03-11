@@ -15,5 +15,5 @@ export async function getCurrencyRate(from: ICurrency){
 }
 
 export function transformMoney(exchange: {[key: string] : number}, value: number, to: ICurrency){
-  return (value * exchange[to]).toFixed(3) + " " + to.toUpperCase();
+  return (value * exchange[to]).toFixed(2) + " " + to.toUpperCase();
 }

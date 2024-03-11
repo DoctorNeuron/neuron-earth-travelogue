@@ -12,7 +12,7 @@ export default function NavMenu({ route, depth = 0 }: { route: IRoute, depth: nu
 
   // Kalau sudah end
   if (route.subroute == null) return (
-    <Link href={route.path ?? "/"} className={classNames('text-white pr-2 flex h-12 items-center w-full cursor-pointer hover:border-b-2 hover:border-b-white no-underline', {
+    <Link href={route.path ?? "/"} className={classNames('text-white pr-2 flex h-8 items-center w-full cursor-pointer hover:border-b-2 hover:border-b-white no-underline text-sm', {
       'pl-4': depth === 0,
       'font-bold underline': pathName === route.path,
       'pl-6': depth === 1,
@@ -24,7 +24,7 @@ export default function NavMenu({ route, depth = 0 }: { route: IRoute, depth: nu
   // Nesting route
   else return (
     <div className='flex flex-col'>
-      <div className={classNames('pr-2 flex h-12 items-center w-full cursor-pointer justify-between bg-gray-900', {
+      <div className={classNames('pr-2 flex h-8 items-center w-full cursor-pointer justify-between bg-gray-900 text-sm', {
         'pl-4': depth === 0,
         'pl-6': depth === 1,
         'pl-8': depth === 2,

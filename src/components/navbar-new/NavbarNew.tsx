@@ -18,7 +18,7 @@ export default function NavbarNew() {
       <div className='flex justify-between'>
         <div className={classNames('p-4', { 'hidden': collapse })}>
           <p className='font-bold text-lg'>NeuLore</p>
-          <p className='font-light text-sm'>Ola</p>
+          <p className='font-light text-sm'>🍉🍉🍉</p>
         </div>
         <div
           className={classNames('w-[2rem] flex items-center cursor-pointer bg-slate-900 justify-center')}
@@ -29,7 +29,7 @@ export default function NavbarNew() {
       </div>
 
       {/* Middle */}
-      <div className={classNames({ 'hidden': collapse })}>
+      <div className={classNames({ 'hidden': collapse }, 'overflow-y-scroll scrollbar-none')}>
         <NavMenuWrapper/>
       </div>
 

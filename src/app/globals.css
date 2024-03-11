@@ -39,3 +39,9 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+@layer utilities {
+  .scrollbar-default {
+    @apply scrollbar-track-slate-600/30 scrollbar-thumb-slate-400/70 scrollbar-thin
+  }
+}

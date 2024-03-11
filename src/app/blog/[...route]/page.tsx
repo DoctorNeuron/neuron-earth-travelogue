@@ -5,7 +5,8 @@ import { fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
 import { TransportationList, TransportationMode } from '@/model/transportation';
 import { CitationData, CitationList } from '@/model/citation';
 import { Markdown } from '@/model/markdown';
-import BlogClientPage from './blog';
+import { serialize } from 'next-mdx-remote/serialize';
+import BlogPage, { BlogPageProps } from '@/components/blog/blog-page/BlogPage';
 
 interface MarkdownData {
   title: string,
@@ -14,14 +15,6 @@ interface MarkdownData {
   date: string,
   path: string,
   keywords: string[]
-}
-
-export interface BlogPageProps {
-  content: string,
-  review: { [key: string]: FoodReviewVendor },
-  transportation: { [key: string]: TransportationMode },
-  citation: { [key: string]: CitationData },
-  data: MarkdownData
 }
 
 async function processContent(mat: Markdown) {
@@ -62,7 +55,7 @@ export async function generateMetadata({ params }: { params: { route: string[] }
   }
 }
 
-export default async function BlogPage({ params }: { params: { route: string[] } }) {
+export default async function TravelBlogPage({ params }: { params: { route: string[] } }) {
   const route = params.route;
   if (route.length !== 2) return notFound();
 
@@ -73,6 +66,6 @@ export default async function BlogPage({ params }: { params: { route: string[] }
   if (finalData === false) return notFound();
 
   return (
-    <BlogClientPage data={finalData}/>
+    <BlogPage {...finalData}/>
   )
 }

@@ -1,3 +1,4 @@
+import BlogPage from '@/components/blog/blog-page/BlogPage';
 import { DefaultMarkdownComponents } from '@/components/blog/constant';
 import { fetchMarkdown } from '@/helper/markdown-helper';
 import { Metadata } from 'next';
@@ -19,6 +20,6 @@ export default async function FAQPage() {
   }
 
   return (
-    <p>A</p>
+    <BlogPage { ...markdownData }/>
   )
 }

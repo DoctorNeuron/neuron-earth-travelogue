@@ -1,6 +1,6 @@
 import { TransportationMode } from '@/model/transportation'
-import { transformCurrency } from '@/utilities/currency'
-import { ICurrency } from '@/utilities/store'
+import { getCurrencyRate, transformCurrency, transformMoney } from '@/utilities/currency'
+import { ICurrency, useGlobalStore } from '@/utilities/store'
 import classNames from 'classnames'
 import { getCookie } from 'cookies-next'
 import React, { useEffect, useState } from 'react'
@@ -41,12 +41,12 @@ function TransportationPoint({ name, order, length }: { name: string, order: num
 
 export default function Transportation(props: TransportationProps) {
 
-  const [price, setPrice] = useState("0")
-
-  // let price = await transformCurrency(props.data.price, props.data.currency ?? "idr", ("idr") as ICurrency);
+  const [money, setMoney] = useState<{ [key: string]: number }>({});
+  const currency = useGlobalStore(x => x.currency);
+  
   useEffect(() => {
-    transformCurrency(props.data.price, props.data.currency ?? "idr", ("idr") as ICurrency).then(x => setPrice(x));
-  });
+    getCurrencyRate(props.data.currency ?? "idr").then(o => setMoney(o));
+  }, [props.data.currency]);
 
   return (
     <div className='w-full'>
@@ -61,11 +61,11 @@ export default function Transportation(props: TransportationProps) {
                 props.data.type === 'mrt' ? "MRT" :
                   props.data.type === 'train' ? "Train" : ""
           }</h1>
-          <h2 className='font-bold text-green-300'>{price}</h2>
+          <h2 className='font-bold text-green-300'>{transformMoney(money, props.data.price, currency)}</h2>
         </div>
 
         {props.data.routes.map(r =>
-          <div className='flex overflow-x-scroll pt-3' key={r.name}>
+          <div className='flex overflow-x-scroll scrollbar-default pt-3' key={r.name}>
             {r.route.map((x, idx, arr) => (<TransportationPoint name={x} key={idx} order={idx} length={arr.length} />))}
           </div>
         )}

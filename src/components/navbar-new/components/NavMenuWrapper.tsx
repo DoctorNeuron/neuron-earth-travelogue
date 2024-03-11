@@ -15,8 +15,6 @@ export default function NavMenuWrapper() {
       .then(r => r.json())
       .then(d => {
         setRoute(d["router"] as IRoute[])
-        console.log(d["router"]);
-        console.log(BLOG_URL);
       })
   }, [])
   if (route.length > 0) return (

@@ -47,7 +47,7 @@ export default function CastawayProduct({ data }: { data : Tables<'the_sims_cast
   ];
 
   const rowClick = (row: Row<Tables<'the_sims_castaway_product'>>) => {
-    console.log(row.original.name);
+
   }
 
   return (

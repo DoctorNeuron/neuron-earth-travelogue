@@ -21,7 +21,7 @@ export const useGlobalStore = create<IGlobalStore>()(
   subscribeWithSelector(
     persist(
       (set) => ({
-        navbarCollapse: false,
+        navbarCollapse: true,
         currency: "-",
         picturePopup: "",
         setNavbarCollapse: (n?: boolean) => set((state) => ({ navbarCollapse: (typeof n === 'boolean' ? n : !state.navbarCollapse) })),

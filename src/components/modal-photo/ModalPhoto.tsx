@@ -9,12 +9,12 @@ export default function ModalPhoto() {
 
   const [pic, setPic] = useGlobalStore(x => [x.picturePopup, x.setPicturePopup]);
   const [enlarge, setEnlarge] = useState(false);
-  const [load, setLoad] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const closeModal = () => {
     setPic("");
     setEnlarge(false);
-    setLoad(false);
+    setImageLoaded(false);
   }
 
   return (
@@ -25,22 +25,27 @@ export default function ModalPhoto() {
         <div className='border-b-2 border-b-gray-800 h-12 text-4xl flex justify-end items-center pl-2 pr-2'>
           <X className='cursor-pointer' onClick={closeModal} />
         </div>
-        <div className='overflow-scroll scrollbar-default rounded-bl-md rounded-br-md w-fit max-h-[80vh]'>
+        <div className={classnames('scrollbar-default rounded-bl-md rounded-br-md w-fit max-h-[80vh]', {
+          'overflow-scroll': imageLoaded,
+          'overflow-hidden': !imageLoaded
+        })}>
           <div className={classnames({
-            'hidden': !load
+            'hidden': !imageLoaded,
           })}>
-            <Image src={pic} alt="" width={0} height={0} sizes='100vw'
-              onLoad={() => setLoad(true)}
-              className={classnames('w-full h-auto', {
-                'origin-top-left scale-150': enlarge
-              })}
+            { <Image src={pic} alt="" width={0} height={0} sizes='100vw'
+                onLoad={() => setImageLoaded(true)}
+                className={classnames('w-full h-auto', {
+                  'origin-top-left scale-[2] cursor-zoom-out': enlarge,
+                  'cursor-zoom-in': !enlarge
+                })}
               onClick={() => setEnlarge(!enlarge)} />
+            }
             <p></p>
           </div>
-          <div className={classnames('', {
-            'hidden': load
+          <div className={classnames('overflow-hidden p-4', {
+            'hidden': imageLoaded
           })}>
-            <Skeleton height={"60vh"}/>
+            <p>Loading...</p>
           </div>
         </div>
       </div>

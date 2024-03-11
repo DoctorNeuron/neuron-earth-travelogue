@@ -22,7 +22,7 @@ export default function NavbarNew() {
         </div>
         <div
           className={classNames('w-[2rem] flex items-center cursor-pointer bg-slate-900 justify-center')}
-          onClick={setCollapse}
+          onClick={() => { setCollapse() }}
         >
           {collapse ? <ChevronRight /> : <ChevronLeft />}
         </div>

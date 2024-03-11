@@ -1,0 +1,41 @@
+.freeze-table {
+  max-height: 500px;
+  width: auto;
+  overflow-x: scroll;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.411);
+  border-radius: 5px;
+}
+
+table {
+  /* overflow: hidden; */
+  width: 100%;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+
+}
+
+thead tr {
+  border-radius: 50px;
+  background-color: #384965;
+}
+
+thead tr th {
+  padding: .5rem;
+  font-size: 16px;
+  position: sticky;
+  top: 0;
+  font-size: 14px;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+tbody tr td {
+  padding: .05rem .4rem;
+  font-size: 14px;
+}

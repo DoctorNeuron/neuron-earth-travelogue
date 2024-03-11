@@ -12,8 +12,8 @@ export default function SelectCurrency() {
   const onChangeCurrency = (e: ChangeEvent<HTMLSelectElement>) => {
     if (CurrencyOptions.includes(e.target.value as ICurrency)) {
       setCurrency(e.target.value as ICurrency);
-      setCookie('currency', e.target.value);
-      router.refresh();
+      // setCookie('currency', e.target.value);
+      // router.refresh();
     }
   }
 

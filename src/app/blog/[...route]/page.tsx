@@ -1,45 +1,32 @@
 import React from 'react'
-import matter from 'gray-matter';
-import { DateTime } from 'luxon';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import FoodReview from '../../../components/blog/food-review/FoodReview';
 import { FoodReviewData, FoodReviewVendor } from '@/model/food-review';
 import { notFound } from 'next/navigation';
 import { fetchJson, fetchMarkdown } from '@/helper/markdown-helper';
-import { DefaultMarkdownComponents } from '@/components/blog/constant';
 import { TransportationList, TransportationMode } from '@/model/transportation';
-import Transportation from '@/components/blog/transportation/Transportation';
 import { CitationData, CitationList } from '@/model/citation';
-import Citation from '@/components/citation/Citation';
+import { Markdown } from '@/model/markdown';
+import { serialize } from 'next-mdx-remote/serialize';
+import BlogPage, { BlogPageProps } from '@/components/blog/blog-page/BlogPage';
 
 interface MarkdownData {
   title: string,
   id: string,
   author: string,
-  date: DateTime,
+  date: string,
   path: string,
   keywords: string[]
 }
 
-interface BlogPageProps {
-  content: string,
-  review: { [key: string]: FoodReviewVendor },
-  transportation: { [key: string]: TransportationMode },
-  citation: { [key: string]: CitationData },
-  data: MarkdownData
-}
+async function processContent(mat: Markdown) {
+  const reviewPath = (mat.data.path as string).split('/')[0];
 
-async function processContent(mat: matter.GrayMatterFile<string>) {
-  const reviewPath = (mat.data.path as string).split('/');
-  reviewPath.pop();
-
-  const reviewFetch = await fetchJson<FoodReviewData>(`${reviewPath.join('/')}/review`);
+  const reviewFetch = await fetchJson<FoodReviewData>(`${reviewPath}/review`);
   if (!reviewFetch) return false;
 
-  const transportFetch = await fetchJson<TransportationList>(`${reviewPath.join('/')}/transportation`);
+  const transportFetch = await fetchJson<TransportationList>(`${reviewPath}/transportation`);
   if (!transportFetch) return false;
 
-  const citationFetch = await fetchJson<CitationList>(`${reviewPath.join('/')}/citation`);
+  const citationFetch = await fetchJson<CitationList>(`${reviewPath}/citation`);
   if (!citationFetch) return false;
 
   return {
@@ -51,9 +38,9 @@ async function processContent(mat: matter.GrayMatterFile<string>) {
       title: mat.data.title,
       id: mat.data.id,
       author: mat.data.author,
-      date: DateTime.fromISO(mat.data.date),
+      date: mat.data.date,
       path: mat.data.path,
-      keywords: (mat.data.keywords as string).split("|")
+      keywords: mat.data.keywords
     } as MarkdownData
   } as BlogPageProps;
 
@@ -68,7 +55,7 @@ export async function generateMetadata({ params }: { params: { route: string[] }
   }
 }
 
-export default async function BlogPage({ params }: { params: { route: string[] } }) {
+export default async function TravelBlogPage({ params }: { params: { route: string[] } }) {
   const route = params.route;
   if (route.length !== 2) return notFound();
 
@@ -78,26 +65,7 @@ export default async function BlogPage({ params }: { params: { route: string[] }
   const finalData = await processContent(markdownData);
   if (finalData === false) return notFound();
 
-  const usedComponents = {
-    ...DefaultMarkdownComponents,
-    FoodReview: async (pr: any) => {
-      let id = pr.id as string;
-      return <FoodReview id={id} order={finalData.review[id]} />
-    },
-    Transportation: (pr: any) => {
-      let id = pr.id as string;
-      return finalData.transportation[id] !== null ? <Transportation id={id} data={finalData.transportation[id]} /> : <p>Not Found</p>;
-    },
-    Citation: (pr: any) => {
-      let id = pr.id as string;
-      let citation = finalData.citation[id];
-      return <Citation url={citation.url as string} id={id} />
-    },
-  };
-
   return (
-    <div>
-      <MDXRemote source={finalData.content} components={usedComponents}></MDXRemote>
-    </div>
+    <BlogPage {...finalData}/>
   )
 }

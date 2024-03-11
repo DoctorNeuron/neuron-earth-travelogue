@@ -20,22 +20,22 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={classNames(inter.className, 'bg-[#1d1d1f]')}>
-        <div className='relative flex h-screen z-2'>
-          <SkeletonTheme baseColor='#262729' highlightColor='#383a3d'>
-            <NavbarNew />
-            <main className={classNames('overflow-auto w-full', {
-              'max-md:hidden': !collapse
-            })}>
-              <div className='m-9'>
-                {children}
-              </div>
-            </main>
-          </SkeletonTheme>
-        </div>
-        <div>
-          <ModalPhoto/>
-        </div>
+      <body suppressHydrationWarning={true} className={classNames(inter.className, 'bg-[#1d1d1f]', 'scrollbar-thumb-slate-600 scrollbar-track-slate-200')}>
+        <SkeletonTheme baseColor='#262729' highlightColor='#383a3d'>  
+          <div className='relative flex h-screen z-2'>
+              <NavbarNew />
+              <main className={classNames('overflow-auto w-full scrollbar-default', {
+                'max-md:hidden': !collapse
+              })}>
+                <div className='m-9'>
+                  {children}
+                </div>
+              </main>
+          </div>
+          <div>
+            <ModalPhoto/>
+          </div>
+        </SkeletonTheme>
       </body>
     </html>
   )

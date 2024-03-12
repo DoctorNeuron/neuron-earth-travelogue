@@ -25,7 +25,7 @@ export default function ModalPhoto() {
         <div className='border-b-2 border-b-gray-800 h-12 text-4xl flex justify-end items-center pl-2 pr-2'>
           <X className='cursor-pointer' onClick={closeModal} />
         </div>
-        <div className={classnames('scrollbar-default rounded-bl-md rounded-br-md w-fit max-h-[80vh]', {
+        <div className={classnames('scrollbar-default rounded-bl-md rounded-br-md w-full max-h-[80vh]', {
           'overflow-scroll': imageLoaded,
           'overflow-hidden': !imageLoaded
         })}>

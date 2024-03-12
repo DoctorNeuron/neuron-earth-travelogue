@@ -5,10 +5,10 @@ import { Tables } from "@/model/database/database.types";
 import { Row, createColumnHelper } from "@tanstack/react-table";
 import Image from "next/image";
 
-export default function CastawayProduct({ data }: { data : Tables<'the_sims_castaway_product'>[] })
+export default function PetsProduct({ data }: { data : Tables<'the_sims_two_pets_product'>[] })
 { 
   // const data = use(GetAllCastaway());
-  const colHelper = createColumnHelper<Tables<'the_sims_castaway_product'>>();
+  const colHelper = createColumnHelper<Tables<'the_sims_two_pets_product'>>();
   const column = [
     colHelper.display({
       id: 'image',
@@ -24,20 +24,20 @@ export default function CastawayProduct({ data }: { data : Tables<'the_sims_cast
       header: 'Name'
     }),
     colHelper.accessor('hunger', {
-      cell: i => i.getValue(),
-      header: 'Hunger'
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
+      header: 'Hunger',
     }),
     colHelper.accessor('bladder', {
-      cell: i => i.getValue(),
-      header: 'Bladder'
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
+      header: 'Bladder',
     }),
     colHelper.accessor('energy', {
-      cell: i => i.getValue(),
-      header: 'Energy'
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
+      header: 'Energy',
     }),
-    colHelper.accessor('eaten_raw', {
-      cell: i => (<div className='text-center'>{i.getValue() ? '✔️' : '❌'}</div>),
-      header: 'Eaten Raw',
+    colHelper.accessor('price', {
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
+      header: 'Price',
     }),
     colHelper.display({
       cell: props => props.row.original.description,
@@ -46,7 +46,7 @@ export default function CastawayProduct({ data }: { data : Tables<'the_sims_cast
     }),
   ];
 
-  const rowClick = (row: Row<Tables<'the_sims_castaway_product'>>) => {
+  const rowClick = (row: Row<Tables<'the_sims_two_pets_product'>>) => {
 
   }
 

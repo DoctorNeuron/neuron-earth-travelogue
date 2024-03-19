@@ -7,7 +7,6 @@ import Image from "next/image";
 
 export default function CastawayProduct({ data }: { data : Tables<'the_sims_castaway_product'>[] })
 { 
-  // const data = use(GetAllCastaway());
   const colHelper = createColumnHelper<Tables<'the_sims_castaway_product'>>();
   const column = [
     colHelper.display({
@@ -24,15 +23,15 @@ export default function CastawayProduct({ data }: { data : Tables<'the_sims_cast
       header: 'Name'
     }),
     colHelper.accessor('hunger', {
-      cell: i => i.getValue(),
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
       header: 'Hunger'
     }),
     colHelper.accessor('bladder', {
-      cell: i => i.getValue(),
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
       header: 'Bladder'
     }),
     colHelper.accessor('energy', {
-      cell: i => i.getValue(),
+      cell: i => (<div className='text-center'>{i.getValue()}</div>),
       header: 'Energy'
     }),
     colHelper.accessor('eaten_raw', {
@@ -40,7 +39,9 @@ export default function CastawayProduct({ data }: { data : Tables<'the_sims_cast
       header: 'Eaten Raw',
     }),
     colHelper.display({
-      cell: props => props.row.original.description,
+      cell: props => (
+        <div className='text-justify line-clamp-3' title={props.row.original.description}>{props.row.original.description}</div>
+      ),
       header: 'Description',
       enableResizing: true
     }),

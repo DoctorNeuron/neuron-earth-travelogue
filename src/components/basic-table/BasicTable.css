@@ -1,7 +1,7 @@
 .freeze-table {
-  max-height: 500px;
+  /* max-height: 500px; */
   width: auto;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
   position: relative;
   border: 2px solid rgba(255, 255, 255, 0.411);
   border-radius: 5px;
@@ -20,7 +20,7 @@ thead {
 
 thead tr {
   border-radius: 50px;
-  background-color: #384965;
+  /* background-color: #1f1f20; */
 }
 
 thead tr th {
@@ -33,6 +33,7 @@ thead tr th {
 
 tbody tr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  height: 2rem;
 }
 
 tbody tr td {

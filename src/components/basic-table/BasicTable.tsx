@@ -1,14 +1,9 @@
 'use client'
 
-import { ColumnDef, Row, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import { ColumnDef, Row, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import classNames from 'classnames'
 import React, { useState } from 'react'
 import './BasicTable.css'
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-} from '@tanstack/match-sorter-utils'
 
 export interface BasicTableProps<T> {
   column: ColumnDef<T, any>[],
@@ -20,6 +15,9 @@ export interface BasicTableProps<T> {
 }
 
 export default function BasicTable<T>(props: BasicTableProps<T>) {
+
+  const [click, setClick] = useState("");
+  const [search, setSearch] = useState("");
 
   const col: ColumnDef<T, any>[] = [
     {
@@ -35,35 +33,45 @@ export default function BasicTable<T>(props: BasicTableProps<T>) {
     data: props.data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    isMultiSortEvent: (e) => true,
-    globalFilterFn: (row, colID, value, addMeta) => {
-      return value === search;
+    getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setSearch,
+    state: {
+      globalFilter: search
     }
   });
 
-  const [click, setClick] = useState("");
-  const [search, setSearch] = useState("");
 
   const rowClick = (row: Row<T>) => {
     setClick(row.id);
-    const cl = props.onRowClick ?? (() => { });
+    const cl = props.onRowClick ?? (() => {  });
     cl(row);
   }
 
   return (
-    <div className='freeze-table scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20'>
-      <input className='bg-transparent outline-none border-white border-2' type="text" value={search} onChange={e => { setSearch(e.target.value) }} />
-      <div className='p-2 flex justify-between items-center'>
-        <div className='font-bold'>
-          { props.title ?? "Table" }
-        </div>
-        <div>
-        <button className='bg-blue-900 p-1.5 text-sm rounded-md hover:bg-blue-950'
-          onClick={_ => { table.resetSorting() }}>Reset All Sorting</button>
-        </div>
-      </div>
+    <div className='freeze-table scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20 bg-neutral-900'>
       <table className='table-auto'>
-        <thead>
+        <thead className='bg-neutral-900'>
+          <tr>
+            <th colSpan={col.length}>
+              <div className='p-2 flex justify-between items-center sticky top-0 gap-3'>
+                <input className={classNames('bg-transparent outline-none border-white/50 border-2 rounded-md appearance-none w-full py-1.5 px-1',
+                  'font-normal'
+                )}
+                  type="search"
+                  value={search}
+                  placeholder='Input keywords here...'
+                  onChange={e => { setSearch(e.target.value) }} />
+                <div className='whitespace-nowrap break-normal h-full'>
+                  <button className='bg-blue-900 p-1.5 text-sm rounded-md hover:bg-blue-950'
+                    onClick={_ => { setSearch("") }}>Reset Search</button>
+                </div>
+                <div className='whitespace-nowrap break-normal h-full'>
+                  <button className='bg-blue-900 p-1.5 text-sm rounded-md hover:bg-blue-950'
+                    onClick={_ => { table.resetSorting() }}>Reset Sort</button>
+                </div>
+              </div>
+            </th>
+          </tr>
           {table.getHeaderGroups().map(hg => (
             <tr key={hg.id}>
               {hg.headers.map(h => (
@@ -93,8 +101,9 @@ export default function BasicTable<T>(props: BasicTableProps<T>) {
           ))}
         </thead>
 
-        <tbody>
-          {table.getRowModel().rows.map(row => (
+        <tbody className='bg-neutral-800'>
+          
+          {table.getRowModel().rows.length > 0 && table.getRowModel().rows.map(row => (
             <tr key={row.id} onClick={() => { rowClick(row) }} className={classNames(
               'hover:bg-blue-400/5',
               row.id === click ? props.onRowClickClass ?? '' : '',
@@ -108,6 +117,12 @@ export default function BasicTable<T>(props: BasicTableProps<T>) {
               ))}
             </tr>
           ))}
+          {
+            table.getRowModel().rows.length == 0 && 
+            <tr>
+              <td colSpan={col.length} className='text-center'>Not Found :&#40;</td>
+            </tr>
+          }
         </tbody>
       </table>
 

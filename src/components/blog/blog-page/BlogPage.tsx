@@ -11,6 +11,8 @@ import { FoodReviewVendor } from '@/model/food-review'
 import { TransportationMode } from '@/model/transportation'
 import { CitationData } from '@/model/citation'
 import { MarkdownData } from '@/model/markdown'
+import BlogTag from '../blog-tag/BlogTag'
+import { DateTime } from 'luxon'
 
 export interface BlogPageProps {
   content: string,
@@ -38,6 +40,18 @@ export default function BlogPage(props: BlogPageProps) {
     Citation: (pr: any) => {
       let id = pr.id as string;
       return props.citation === undefined ? <></> : <Citation url={props.citation[id].url as string} id={id} />
+    },
+    h1: (pr: any) => {
+      let luxonDate = DateTime.fromFormat(props.data.date, "dd-LL-yyyy");
+      return (
+        <div className='pb-4'>
+          <h1 className='font-bold text-4xl'>{pr.children}</h1>
+          <p className='italic'>{luxonDate.toFormat("DDDD")}</p>
+          <div className='flex flex-wrap gap-2'>
+            {props.data.keywords.map(x => (<BlogTag tag={x} key={x}/>))}
+          </div>
+        </div>
+      )
     },
   };
 

@@ -25,7 +25,7 @@ export const DefaultMarkdownComponents = {
       pr.src.startsWith("https://www.youtube.com");
 
     let newPath = process.env.NEXT_PUBLIC_BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <VideoPlayer url={isYoutube ? pr.src : newPath} title={pr.title ?? ''} />
+    return <VideoPlayer {...pr} url={isYoutube ? pr.src : newPath} title={pr.title ?? ''} />
   },
   p: (pr: any) => (<p className='text-justify mt-2 mb-2'>{pr.children}</p>),
   h1: (pr: any) => (<h1 className='font-bold text-4xl'>{pr.children}</h1>),

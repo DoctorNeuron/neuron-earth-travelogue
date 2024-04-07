@@ -5,16 +5,6 @@ import { ICurrency } from '@/utilities/store';
 import Code from '../code/Code';
 
 export const DefaultMarkdownComponents = {
-  img: (pr: any) => {
-    let realProps = pr as { src: string, alt: string };
-    
-    if ((/https:\/\/\w+/).test(pr.src)) return <ImageCaption src={realProps.src} caption={realProps.alt} externalSource={true} />
-    
-    let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
-    let start = pathRegex.exec(realProps.src) ?? [];
-    let newPath = process.env.NEXT_PUBLIC_BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <ImageCaption src={newPath} caption={realProps.alt} externalSource={false} />
-  },
   Video: (pr: any) => {
     let realProps = pr as { src: string, alt: string };
     let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;

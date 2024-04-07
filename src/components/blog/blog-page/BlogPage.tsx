@@ -13,13 +13,15 @@ import { CitationData } from '@/model/citation'
 import { MarkdownData } from '@/model/markdown'
 import BlogTag from '../blog-tag/BlogTag'
 import { DateTime } from 'luxon'
+import ImageCaption from '../image-caption/ImageCaption'
 
 export interface BlogPageProps {
   content: string,
   review?: { [key: string]: FoodReviewVendor },
   transportation?: { [key: string]: TransportationMode },
   citation?: { [key: string]: CitationData },
-  data: MarkdownData
+  data: MarkdownData,
+  blogType: "blog" | "transit"
 }
 
 export default function BlogPage(props: BlogPageProps) {
@@ -52,6 +54,16 @@ export default function BlogPage(props: BlogPageProps) {
           </div>
         </div>
       )
+    },
+    img: (pr: any) => {
+      let realProps = pr as { src: string, alt: string };
+      
+      if ((/https:\/\/\w+/).test(pr.src)) return <ImageCaption src={realProps.src} caption={realProps.alt} externalSource={true} />
+      
+      let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
+      let start = pathRegex.exec(realProps.src) ?? [];
+      let newPath = process.env.NEXT_PUBLIC_BLOG_URL + `${props.blogType}/` + (start == null ? "" : start[2]);
+      return <ImageCaption src={newPath} caption={realProps.alt} externalSource={false} />
     },
   };
 

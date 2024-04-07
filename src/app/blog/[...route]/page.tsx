@@ -66,6 +66,6 @@ export default async function TravelBlogPage({ params }: { params: { route: stri
   if (finalData === false) return notFound();
 
   return (
-    <BlogPage {...finalData}/>
+    <BlogPage {...finalData} blogType='blog'/>
   )
 }

@@ -42,6 +42,6 @@ export default async function TransitBlogPage({ params }: { params: { route: str
   const finalData = await processContent(markdownData);
 
   return (
-    <BlogPage {...finalData}/>
+    <BlogPage {...finalData} blogType='transit'/>
   )
 }

@@ -51,20 +51,22 @@ export default function Transportation(props: TransportationProps) {
     <div className='w-full'>
       <div className={classNames('p-3 w-full rounded-lg flex flex-col border-spacing-5 border-2 border-slate-100', {
         'bg-gray-800': props.data.type === 'bus',
-        'bg-green-900': props.data.type === 'mrt'
+        'bg-green-900': props.data.type === 'mrt',
+        'bg-orange-900': props.data.type === 'train-commuter'
       })}>
         <div className='flex justify-between'>
           <h1 className='font-bold'>{
             props.data.type === 'bus' ? "Bus" :
               props.data.type === 'lrt' ? "LRT" :
                 props.data.type === 'mrt' ? "MRT" :
-                  props.data.type === 'train' ? "Train" : ""
+                  props.data.type === 'train-commuter' ? "Commuter Line" :
+                    props.data.type === 'train' ? 'train' : ""
           }</h1>
           <h2 className='font-bold text-green-300'>{transformMoney(money, props.data.price, currency)}</h2>
         </div>
 
         {props.data.routes.map(r =>
-          <div className='flex overflow-x-scroll scrollbar-default pt-3' key={r.name}>
+          <div className='flex overflow-x-auto scrollbar-default pt-3 [&:not(:last-child)]:border-b-white/30 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:py-2' key={r.name}>
             {r.route.map((x, idx, arr) => (<TransportationPoint name={x} key={idx} order={idx} length={arr.length} />))}
           </div>
         )}

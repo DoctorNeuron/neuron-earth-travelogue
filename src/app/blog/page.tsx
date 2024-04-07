@@ -14,6 +14,6 @@ export default async function FAQPage() {
   if (markdownData === false) return notFound();
 
   return (
-    <BlogPage { ...markdownData }/>
+    <BlogPage { ...markdownData } blogType='blog'/>
   )
 }

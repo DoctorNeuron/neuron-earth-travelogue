@@ -7,7 +7,7 @@ export interface TransportationRoute {
 }
 
 export interface TransportationMode {
-  type: "bus" | "mrt" | "train" | "lrt",
+  type: "bus" | "mrt" | "train" | "lrt" | "train-commuter",
   price: number,
   currency: ICurrency,
   routes: TransportationRoute[]

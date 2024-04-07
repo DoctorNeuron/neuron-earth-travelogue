@@ -1,50 +1,64 @@
 "use client"
 
-import React from 'react'
-import Video from 'next-video';
-import ReactPlayer from 'react-player/lazy';
+import React, { useRef, useState } from 'react'
+import { OnProgressProps } from 'react-player/base';
+import ReactPlayer, { ReactPlayerProps } from 'react-player/lazy';
 
 export interface VideoPlayerProps {
   url: string,
-  title?: string
+  title?: string,
+
+  start?: number,
+  end?: number
+}
+
+interface VideoPlayerState {
+  paused: boolean
 }
 
 export default function VideoPlayer(props: VideoPlayerProps) {
 
-  const isYoutube = props.url.startsWith("https://youtu.be") ||
-    props.url.startsWith("https://youtube.com") ||
-    props.url.startsWith("https://www.youtube.com")
+  const [videoPlayer, setVideoPlayer] = useState<VideoPlayerState>({
+    paused: true
+  });
+
+  const videoRef = useRef<ReactPlayer>(null);
+
+  function handleOnReady() {
+    videoRef.current?.seekTo(props.start ?? 0);
+  }
+
+  function handleOnProgress(state: OnProgressProps) {
+    console.log(props.end)
+    console.log(!!props.end)
+    console.log(!!props.end && Math.floor(state.playedSeconds) > props.end);
+    if (!!props.end && Math.floor(state.playedSeconds) > props.end) {
+      videoRef.current?.seekTo(props.start ?? 0)
+      setVideoPlayer({ paused: true });
+    }
+    if (!!props.start && Math.floor(state.playedSeconds) < props.start) {
+      videoRef.current?.seekTo(props.start ?? 0);
+      setVideoPlayer({ paused: false });
+    }
+  }
+  
+  function handleOnSeek(seconds: number) {
+    setVideoPlayer({ paused: false });
+    if (!!props.end && Math.floor(seconds) > props.end) videoRef.current?.seekTo(props.start ?? 0);
+    if (!!props.start && Math.floor(seconds) < props.start) videoRef.current?.seekTo(props.start ?? 0);
+  }
 
   return (
     <div className='flex justify-center'>
-      <ReactPlayer url={props.url} controls={true} muted={true} />
+      <ReactPlayer url={props.url}
+        ref={videoRef}
+        controls={true}
+        muted={true}
+        playing={!videoPlayer.paused}
+        onProgress={handleOnProgress}
+        onReady={handleOnReady}
+        onSeek={handleOnSeek}
+      />
     </div>
   )
-  
-  // return (
-  //   <div>
-  //     {!isYoutube &&
-  //       // <video controls={true} muted={true} className='w-full max-h-[300px]'>
-  //       //   <source src={props.url} />
-  //       // </video>
-  //       <Video src={props.url}>
-  //       </Video>
-  //     }
-  //     {
-  //       isYoutube &&
-  //       <div className='flex justify-center'>
-  //         <iframe
-  //           width="560"
-  //           height="315"
-  //           src={props.url}
-  //           title={props.title}
-  //           allowFullScreen
-  //           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  //         >
-  //         </iframe>
-  //       </div>
-  //     }
-  //     <p className="italic font-thin text-sm text-center">{props.title}</p>
-  //   </div>
-  // )
 }

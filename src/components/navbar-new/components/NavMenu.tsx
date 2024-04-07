@@ -18,14 +18,14 @@ export default function NavMenu({ route, depth = 0 }: { route: IRoute, depth: nu
     <>
       <Link href={route.path ?? "/"} className={classNames('max-sm:hidden text-white pr-2 flex h-8 items-center w-full cursor-pointer hover:border-b-2 hover:border-b-white no-underline text-sm', {
         'pl-4': depth === 0,
-        'font-bold underline': pathName === route.path,
+        'font-bold underline pointer-events-none': pathName === route.path,
         'pl-6': depth === 1,
         'pl-8': depth === 2,
-        'pl-10': depth === 3,
+        'pl-10': depth === 3
       })}>{route.name}</Link>
       <Link href={route.path ?? "/"} onClick={() => { setnavCollapse(true) }} className={classNames('sm:hidden text-white pr-2 flex h-8 items-center w-full cursor-pointer hover:border-b-2 hover:border-b-white no-underline text-sm', {
         'pl-4': depth === 0,
-        'font-bold underline': pathName === route.path,
+        'font-bold underline pointer-events-none': pathName === route.path,
         'pl-6': depth === 1,
         'pl-8': depth === 2,
         'pl-10': depth === 3,

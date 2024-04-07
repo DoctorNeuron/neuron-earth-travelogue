@@ -5,16 +5,6 @@ import { ICurrency } from '@/utilities/store';
 import Code from '../code/Code';
 
 export const DefaultMarkdownComponents = {
-  img: (pr: any) => {
-    let realProps = pr as { src: string, alt: string };
-    
-    if ((/https:\/\/\w+/).test(pr.src)) return <ImageCaption src={realProps.src} caption={realProps.alt} externalSource={true} />
-    
-    let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
-    let start = pathRegex.exec(realProps.src) ?? [];
-    let newPath = process.env.NEXT_PUBLIC_BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <ImageCaption src={newPath} caption={realProps.alt} externalSource={false} />
-  },
   Video: (pr: any) => {
     let realProps = pr as { src: string, alt: string };
     let pathRegex = /([\.\.\/]+)([\w/\.-]+)/g;
@@ -25,7 +15,7 @@ export const DefaultMarkdownComponents = {
       pr.src.startsWith("https://www.youtube.com");
 
     let newPath = process.env.NEXT_PUBLIC_BLOG_URL + "blog/" + (start == null ? "" : start[2]);
-    return <VideoPlayer url={isYoutube ? pr.src : newPath} title={pr.title ?? ''} />
+    return <VideoPlayer {...pr} url={isYoutube ? pr.src : newPath} title={pr.title ?? ''} />
   },
   p: (pr: any) => (<p className='text-justify mt-2 mb-2'>{pr.children}</p>),
   h1: (pr: any) => (<h1 className='font-bold text-4xl'>{pr.children}</h1>),

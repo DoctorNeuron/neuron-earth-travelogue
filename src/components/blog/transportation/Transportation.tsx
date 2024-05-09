@@ -45,7 +45,13 @@ export default function Transportation(props: TransportationProps) {
   
   useEffect(() => {
     getCurrencyRate(props.data.currency ?? "idr").then(o => setMoney(o));
-  }, [props.data.currency]);
+  }, [props?.data.currency]);
+
+  if (props == null) return (
+    <div className='w-full bg-gray-800 min-h-14 rounded-lg border-spacing-5 border-2 border-slate-100 p-5'>
+      Oops, there might be a problem with this transport review 😞
+    </div>
+  )
 
   return (
     <div className='w-full'>

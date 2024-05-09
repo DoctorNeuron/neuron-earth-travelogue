@@ -29,9 +29,6 @@ export default function VideoPlayer(props: VideoPlayerProps) {
   }
 
   function handleOnProgress(state: OnProgressProps) {
-    console.log(props.end)
-    console.log(!!props.end)
-    console.log(!!props.end && Math.floor(state.playedSeconds) > props.end);
     if (!!props.end && Math.floor(state.playedSeconds) > props.end) {
       videoRef.current?.seekTo(props.start ?? 0)
       setVideoPlayer({ paused: true });
@@ -55,9 +52,9 @@ export default function VideoPlayer(props: VideoPlayerProps) {
         controls={true}
         muted={true}
         playing={!videoPlayer.paused}
-        onProgress={handleOnProgress}
-        onReady={handleOnReady}
-        onSeek={handleOnSeek}
+        onProgress={(!props.end && !props.start) ? () => {} : handleOnProgress}
+        onReady={(!props.end && !props.start) ? () => {} : handleOnReady}
+        onSeek={(!props.end && !props.start) ? () => {} : handleOnSeek}
       />
     </div>
   )

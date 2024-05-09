@@ -11,13 +11,18 @@ export interface FoodReviewProps {
 }
 
 export default function FoodReview(props: FoodReviewProps) {
-
   const [money, setMoney] = useState<{ [key: string]: number }>({});
   const currency = useGlobalStore(x => x.currency);
-
+  
   useEffect(() => {
-    getCurrencyRate(props.order.currency ?? "idr").then(o => setMoney(o));
-  }, [props.order.currency])
+    getCurrencyRate(props?.order.currency ?? "idr").then(o => setMoney(o));
+  }, [props?.order.currency])
+
+  if (props == null) return (
+    <div className='w-full bg-gray-800 min-h-14 rounded-lg border-spacing-5 border-2 border-slate-100 p-5'>
+      Oops, there might be a problem with this food review 😞
+    </div>
+  )
 
   const sum = props.order.orders.reduce<number>((acc, val) => acc + val.price, 0);
   const tax = props.order.tax ? Math.round(sum * props.order.tax / 100) : 0;
